@@ -1,0 +1,33 @@
+version: "3.7"
+
+services:
+
+  #Container untuk aplikasi item-app
+  item-app:
+    #Menggunakan image item-app dari GitHub Packages tiosetiaatih
+    image: ghcr.io/tiosetiaatih/item-app:v1
+    #Port yang akan di expose
+    ports:
+      - 80:8080
+    working_dir: /app
+    volumes:
+      - ./:/app
+    #Menerapkan restart policy di berkas docker-compose.yml agar container selalu restart pada saat build
+    restart: always
+    #Script depends_on digunakan untuk memastikan bahwa aplikasi item-app hanya berjalan setelah item-db di build
+    depends_on:
+      - item-db
+
+  #Container untuk aplikasi item-db
+  item-db:
+    #Menggunakan image mongo:3 dari GitHub Packages
+    image: mongo:3
+    #Menggunakan volume yang sudah dibuat bernama app-db dengan target location /data/db
+    volumes:
+      - app-db:/data/db
+    #Menerapkan restart policy di berkas docker-compose.yml agar container selalu restart pada saat build
+    restart: always
+
+#Create volume name app-db
+volumes:
+  app-db:
