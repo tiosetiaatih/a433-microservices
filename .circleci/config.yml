@@ -1,0 +1,59 @@
+#Menggunakan CircleCI versi 2.1
+version: 2.1
+
+jobs:
+   #Job linting Dockerfile
+   lint-dockerfile:
+      docker:
+        #Menggunakan docker image docker:18.06.3-ce
+        - image: "docker:18.06.3-ce"
+      steps:
+        #Checkout branch GitHub
+        - checkout
+        #Agar dapat menjalankan Docker in Docker (Docker in docker executor)
+        - setup_remote_docker
+        #Menjalankan hadolint untuk linting Dockerfile
+        - run:
+            name: "Linting Dockerfile"
+            command: "docker run --rm --interactive hadolint/hadolint:latest < Dockerfile"
+   #Job test-app
+   test-app:
+      docker:
+        #Menggunakan image cmig/go:1.19.4
+        - image: "cimg/go:1.19.4"
+      steps:
+        #Checkout branch GitHub
+        - checkout
+        #Menjalankan golang test untuk backend
+        - run:
+            name: "Menjalankan unit test untuk backend"
+            command: "go test -v -short --count=1 $(go list ./...)"
+   build-app-karsajobs:
+      docker:
+        #Menggunakan docker image docker:18.06.3-ce
+        - image: "docker:18.06.3-ce"
+      steps:
+        #Checkout branch GitHub        
+        - checkout
+        #Agar dapat menjalankan Docker in Docker (Docker in docker executor)
+        - setup_remote_docker
+        #Build image dari Dockerfile
+        - run:
+            name: "Build Image"
+            command: "docker build . -t ghcr.io/yogi-ra/karsajobs:latest"
+        - run:
+        #Login GitHub Packages
+            name: "Login GitHub Packages"
+            command: "docker login ghcr.io -u $GITHUB_USERNAME -p $GITHUB_PASSWORD"
+        #Push image ke GitHub Packages
+        - run:
+            name: "Push Image"
+            command: "docker push ghcr.io/yogi-ra/karsajobs:latest"
+
+workflows:
+  #Workflow lint-dockerfile, test-app, dan build-app-karsajobs
+  lint-test-build-push-workflow:
+    jobs:
+      - lint-dockerfile
+      - test-app
+      - build-app-karsajobs
