@@ -1,6 +1,6 @@
 version: '2.1'
 orbs:
-  docker: circleci/docker@x.y.z
+  docker: circleci/docker@2.2.0
 workflows:
   lint:
     jobs:
@@ -13,5 +13,6 @@ workflows:
   build-app-karsajobs-ui:
     jobs:
       - docker/publish:
-          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          image: karsajobs-ui:latest
+          tag: karsajobs-ui
           update-description: true
