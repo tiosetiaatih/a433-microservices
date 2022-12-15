@@ -1,18 +1,47 @@
-version: '2.1'
-orbs:
-  docker: circleci/docker@2.2.0
+#Menggunakan CircleCI versi 2.1
+version: 2.1
+
+jobs:
+   #Job linting Dockerfile
+   lint-dockerfile:
+      docker:
+        #Menggunakan docker image docker:18.06.3-ce
+        - image: "docker:18.06.3-ce"
+      steps:
+        #Checkout branch github
+        - checkout
+        #Agar dapat menjalankan Docker in Docker (Docker in docker executor)
+        - setup_remote_docker
+        #Menjalankan hadolint untuk linting Dockerfile
+        - run:
+            name: "Linting Dockerfile"
+            command: "docker run --rm --interactive hadolint/hadolint:latest < Dockerfile"
+   #Job build-app-karsajobs-ui
+   build-app-karsajobs-ui:
+      docker:
+        #Menggunakan docker image docker:18.06.3-ce
+        - image: "docker:18.06.3-ce"
+      steps:
+        #Checkout branch github
+        - checkout
+        #Agar dapat menjalankan Docker in Docker (Docker in docker executor)
+        - setup_remote_docker
+        #Build image dari Dockerfile
+        - run:
+            name: "Build Image"
+            command: "docker build . -t ghcr.io/yogi-ra/karsajobs-ui:latest"
+        #Login GitHub Packages
+        - run:
+            name: "Login GitHub Packages"
+            command: "docker login ghcr.io -u $GITHUB_USERNAME -p $GITHUB_PASSWORD"
+        #Push image ke GitHub Packages
+        - run:
+            name: "Push Image"
+            command: "docker push ghcr.io/yogi-ra/karsajobs-ui:latest"
+
 workflows:
-  lint:
+#Workflow lint-dockerfile dan build-app-karsajobs-ui (build & push image)
+  lint-build-push-workflow:
     jobs:
-      - docker/hadolint:
-          dockerfiles: Dockerfile
-          executor-class: medium
-          hadolint-tag: karsajobs-ui:latest
-          ignore-rules: 'DL4005,DL3008'
-          trusted-registries: 'docker.io,my-company.com:5000'
-  build-app-karsajobs-ui:
-    jobs:
-      - docker/publish:
-          image: karsajobs-ui:latest
-          tag: karsajobs-ui
-          update-description: true
+      - lint-dockerfile
+      - build-app-karsajobs-ui
