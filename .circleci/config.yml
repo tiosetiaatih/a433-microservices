@@ -1,0 +1,17 @@
+version: '2.1'
+orbs:
+  docker: circleci/docker@x.y.z
+workflows:
+  lint:
+    jobs:
+      - docker/hadolint:
+          dockerfiles: Dockerfile
+          executor-class: medium
+          hadolint-tag: karsajobs-ui:latest
+          ignore-rules: 'DL4005,DL3008'
+          trusted-registries: 'docker.io,my-company.com:5000'
+  build-app-karsajobs-ui:
+    jobs:
+      - docker/publish:
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          update-description: true
