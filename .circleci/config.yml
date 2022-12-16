@@ -20,7 +20,7 @@ jobs:
    test-app:
       docker:
         #menggunakan image cimg latest
-        - image: "docker pull golang"
+        - image: "golang:1.20rc1-bullseye"
       steps:
         #git branch checkout
         - checkout
