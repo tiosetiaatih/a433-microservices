@@ -18,6 +18,9 @@ jobs:
             command: "docker run --rm --interactive hadolint/hadolint:latest < Dockerfile"
    #membuat job test-app
    test-app:
+      docker:
+        #menggunakan image cimg latest
+        - image: "cimg/go:1.19.4"
       steps:
         #git branch checkout
         - git checkout
@@ -31,7 +34,7 @@ jobs:
         #menggunakan docker image latest
         - image: "docker:19.03.15"
       steps:
-        #git branch checkout        
+        #git branch checkout
         - git checkout
         #setup remote docker supaya docker bisa berjalan di docker (docker in docker)
         - setup_remote_docker
