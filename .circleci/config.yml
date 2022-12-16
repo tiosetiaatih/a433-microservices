@@ -33,7 +33,7 @@ jobs:
         #Login ke GitHub Packages
         - run:
             name: "Login GitHub Packages"
-            command: "docker login ghcr.io -u $GITHUB_USERNAME -p $GITHUB_PASSWORD"
+            command: "$CR_PAT | docker login ghcr.io -u tiosetiaatih --password-stdin"
         #Push image ke GitHub Packages
         - run:
             name: "Pushing Image"
