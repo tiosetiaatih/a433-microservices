@@ -20,7 +20,7 @@ jobs:
    build-app-karsajobs-ui:
       docker:
         #menggunakan docker image latest
-        - image: "docker:19.03.15-ce"
+        - image: "docker:19.03.15"
       steps:
         #git branch checkout
         - checkout
