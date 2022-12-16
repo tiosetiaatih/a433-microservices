@@ -10,7 +10,7 @@ jobs:
       steps:
         #git branch checkout
         - checkout
-        #agar docker bisa berjalan di docker (docker in docker)
+        #setup remote docker supaya docker bisa berjalan di docker (docker in docker)
         - setup_remote_docker
         #install hadolint dan menjalankannya terhadap berkas dockerfile
         - run:
@@ -24,9 +24,9 @@ jobs:
       steps:
         #git branch checkout
         - checkout
-        #agar docker bisa berjalan di docker (docker in docker)
+        #setup remote docker supaya docker bisa berjalan di docker (docker in docker)
         - setup_remote_docker
-        #build image yang sudah dibuat di step sebelumnya
+        #build image dari dockerfile
         - run:
             name: "Build Image"
             command: "docker build . -t ghcr.io/tiosetiaatih/karsajobs-ui:latest"
