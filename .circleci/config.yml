@@ -9,7 +9,7 @@ jobs:
         - image: "docker:19.03.15"
       steps:
         #git branch checkout
-        - checkout
+        - git checkout
         #setup remote docker supaya docker bisa berjalan di docker (docker in docker)
         - setup_remote_docker
         #install hadolint dan menjalankannya terhadap berkas dockerfile
@@ -18,12 +18,9 @@ jobs:
             command: "docker run --rm --interactive hadolint/hadolint:latest < Dockerfile"
    #membuat job test-app
    test-app:
-      docker:
-        #menggunakan image cimg latest
-        - image: "cimg/go:1.19.4"
       steps:
         #git branch checkout
-        - checkout
+        - git checkout
         #menjalankan unit test untuk backend
         - run:
             name: "Menjalankan unit test untuk backend"
@@ -35,7 +32,7 @@ jobs:
         - image: "docker:19.03.15"
       steps:
         #git branch checkout        
-        - checkout
+        - git checkout
         #setup remote docker supaya docker bisa berjalan di docker (docker in docker)
         - setup_remote_docker
         #build image dari dockerfile
