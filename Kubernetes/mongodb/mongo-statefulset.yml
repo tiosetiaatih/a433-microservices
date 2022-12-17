@@ -1,0 +1,60 @@
+#apiVersion versi Kubernetes API yang digunakan object
+apiVersion: apps/v1
+#Jenis object statefulset
+kind: StatefulSet
+metadata:
+  name: mongo
+  labels:
+    app: mongo
+#spesifikasi dari statefulset yang akan dibuat
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+      tier: backend
+  serviceName: mongo
+  replicas: 1
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: mongo
+        tier: backend
+    #spesifikasi dari container mongo
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: mongo #image menggunakan mongo
+        image: mongo:4.0.8
+        #env menggunakan dari mongo-secret.yml
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME_FILE
+          value: /etc/mongo-credentials/MONGO_ROOT_USERNAME
+        - name: MONGO_INITDB_ROOT_PASSWORD_FILE
+          value: /etc/mongo-credentials/MONGO_ROOT_PASSWORD
+        ports:
+        - containerPort: 27017
+        #Path volumemount yang dibuat di container mongo
+        volumeMounts:
+        - name: mongo-persistent-storage
+          mountPath: /data/db
+        - name: mongo-configmap
+          mountPath: /config
+        - name: mongo-credentials
+          mountPath: "/etc/mongo-credentials"
+      volumes:
+      #diambil dari pv-pvc yang dibuat di mongo-pv-pvc.yml
+      - name: mongo-persistent-storage
+        persistentVolumeClaim:
+          claimName: mongo-pv-claim
+      #menggunakan configmap yang sudah di define di mongo-configmap.yml
+      - name: mongo-configmap
+        configMap:
+          name: mongo-config
+          items:
+          - key: mongo.conf
+            path: mongo.conf
+      #menggunakan secret yang sudah di define di mongo-secret.yml
+      - name: mongo-credentials
+        secret:
+          secretName: mongo-credentials

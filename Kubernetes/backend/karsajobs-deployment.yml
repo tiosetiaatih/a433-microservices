@@ -1,0 +1,41 @@
+#apiVersion versi Kubernetes API yang digunakan object
+apiVersion: apps/v1
+#Jenis object Deployment
+kind: Deployment
+#Informasi terkait object Deployment
+metadata:
+  name: karsajobs-backend
+#Spesifikasi dari object yang akan dibuat
+spec:
+  #replikasi dari object
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    #spesifikasi dari container yang akan dibuat
+    spec:
+      containers:
+      - name: karsajobs
+        image: ghcr.io/tiosetiaatih/karsajobs:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+          - name: APP_PORT
+            value: "8080"
+          - name: MONGO_HOST
+            value: mongo-service
+          - name: MONGO_USER
+            valueFrom:
+              secretKeyRef:
+                name: mongo-credentials
+                key:  MONGO_ROOT_USERNAME
+          - name: MONGO_PASS
+            valueFrom:
+              secretKeyRef:
+                name: mongo-credentials
+                key: MONGO_ROOT_PASSWORD

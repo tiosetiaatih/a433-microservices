@@ -1,0 +1,29 @@
+#apiVersion versi Kubernetes API yang digunakan object
+apiVersion: apps/v1
+#Jenis object Deployment
+kind: Deployment
+#Informasi terkait object Deployment
+metadata:
+  name: karsajobs-frontend
+  labels:
+    app: frontend
+#Spesifikasi dari object yang akan dibuat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    #spesifikasi dari container yang akan dibuat
+    spec:
+      containers:
+      - name: karsajobs-ui
+        image: ghcr.io/tiosetiaatih/karsajobs-ui:latest
+        ports:
+          - containerPort: 8080
+        resources:
+          requests:
+            cpu: 20m

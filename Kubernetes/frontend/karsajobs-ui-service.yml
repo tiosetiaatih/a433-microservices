@@ -1,0 +1,15 @@
+#apiVersion versi Kubernetes API yang digunakan object
+apiVersion: v1
+#Jenis object service
+kind: Service
+#Spesifikasi dari service yang akan dibuat
+metadata:
+  name: karsajobs-frontend
+  labels:
+    app: frontend
+#spesifikasi dari container yang akan dibuat
+spec:
+  ports:
+  - port: 8080
+  selector:
+    app: frontend

@@ -1,0 +1,11 @@
+#apiVersion versi Kubernetes API yang digunakan object
+apiVersion: v1
+#Jenis object configmap
+kind: ConfigMap
+metadata:
+  name: mongo-config
+#key value
+data:
+  mongo.conf: |
+    storage:
+      dbPath: /data/db
