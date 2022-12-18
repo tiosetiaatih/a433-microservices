@@ -12,7 +12,7 @@ jobs:
         - checkout
         #setup remote docker supaya docker bisa berjalan di docker (docker in docker)
         - setup_remote_docker
-        #install hadolint dan menjalankannya terhadap berkas dockerfile
+        #install hadolint dan menjalankannya ke berkas dockerfile
         - run:
             name: "Lint Dockerfile"
             command: "docker run --rm --interactive hadolint/hadolint:latest < Dockerfile"
@@ -22,7 +22,7 @@ jobs:
         #menggunakan docker image latest
         - image: "docker:19.03.15"
       steps:
-        #git branch checkout
+        #git checkout
         - checkout
         #setup remote docker supaya docker bisa berjalan di docker (docker in docker)
         - setup_remote_docker
@@ -41,7 +41,7 @@ jobs:
 
 workflows:
 #job yang di define lint-dockerfile dan build-app-karsajobs-ui (build dan push image)
-  lint-build-push-workflow:
+  workflows-jobs:
     jobs:
       - lint-dockerfile
       - build-app-karsajobs-ui
