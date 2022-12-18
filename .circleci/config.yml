@@ -8,7 +8,7 @@ jobs:
         #menggunakan docker image latest
         - image: "docker:19.03.15"
       steps:
-        #git branch checkout
+        #git checkout
         - checkout
         #setup remote docker supaya docker bisa berjalan di docker (docker in docker)
         - setup_remote_docker
@@ -22,7 +22,7 @@ jobs:
         #menggunakan image golang latest
         - image: "golang:1.20rc1-bullseye"
       steps:
-        #git branch checkout
+        #git checkout
         - checkout
         #menjalankan unit test untuk backend
         - run:
@@ -53,7 +53,7 @@ jobs:
 
 workflows:
   #job yang di define lint-dockerfile, test-app, dan build-app-karsajobs (build dan push image)
-  lint-test-build-push-workflow:
+  workflows-jobs:
     jobs:
       - lint-dockerfile
       - test-app
