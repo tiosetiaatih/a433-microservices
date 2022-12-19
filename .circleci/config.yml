@@ -1,12 +1,6 @@
 #menggunakan CircleCI versi 2.1
 version: 2.1
 
-#job yang di define lint-dockerfile, test-app, dan build-app-karsajobs (build dan push image)
-stages:
-    - lint-dockerfile
-    - test-app
-    - build-app-karsajobs
-
 jobs:
    #membuat job lint-dockerfile
    lint-dockerfile:
@@ -56,3 +50,11 @@ jobs:
         - run:
             name: "Pushing Image"
             command: "docker push ghcr.io/tiosetiaatih/karsajobs:latest"
+
+workflows:
+  #job yang di define lint-dockerfile, test-app, dan build-app-karsajobs (build dan push image)
+  workflows-jobs:
+    jobs:
+      - lint-dockerfile
+      - test-app
+      - build-app-karsajobs
